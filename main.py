@@ -36,7 +36,11 @@ async def subscribe():
                     "pool": "pump"  # exchange to trade on. "pump" or "raydium"
                 })
                 response_data = response.json()  # Tx signature or error(s)
-                print(f'Transaction: https://solscan.io/tx/{response_data["signature"]}')
+                signature = response_data.get("signature")
+                if signature is not None:
+                    print(f'Transaction: https://solscan.io/tx/{response_data["signature"]}')
+                else:
+                    print(f"Transaction not successful: {response_data}")
 
 
 asyncio.run(subscribe())
