@@ -3,13 +3,11 @@ import requests
 import websockets
 import json
 import base64
-import os
 
-API_KEY = os.getenv("API_KEY")  # api key for the wallet you created
-if API_KEY is None:
-    print("Environment variable is not properly set")
-    exit()
+API_KEY = ""  # api key for the wallet you created
+
 TRACK_ADDRESS = ["", ]  # list of accounts to watch
+TRACK_ADDRESS = [address.strip() for address in TRACK_ADDRESS]
 
 url = base64.b64decode("aHR0cHM6Ly9wdW1wcG9ydGFsLmZ1bi9hcGkvdHJhZGU/YXBpLWtleT0=").decode("utf-8") + API_KEY
 uri = base64.b64decode("d3NzOi8vcHVtcHBvcnRhbC5mdW4vYXBpL2RhdGE=").decode("utf-8")
@@ -25,7 +23,7 @@ async def subscribe():
 
         async for message in websocket:
             data = json.loads(message)
-            if data.get("txType") == "create":
+            if data.get("txType") == "create" and data.get("pool") == "pump":
                 response = requests.post(url=url, data={
                     "action": "buy",  # "buy" or "sell"
                     "mint": data["mint"],  # contract address of the token you want to trade
