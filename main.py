@@ -14,7 +14,7 @@ uri = base64.b64decode("d3NzOi8vcHVtcHBvcnRhbC5mdW4vYXBpL2RhdGE=").decode("utf-8
 
 
 async def subscribe():
-    async with websockets.connect(uri) as websocket:
+    async with websockets.connect(uri, ping_interval=20,) as websocket:
         payload = {
             "method": "subscribeAccountTrade",
             "keys": TRACK_ADDRESS
